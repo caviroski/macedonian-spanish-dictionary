@@ -10,7 +10,7 @@ import 'package:shelf_router/shelf_router.dart';
 const _hostname = 'localhost';
 
 var jsonPath = File('../assets/dictionary.json');
-var dictionaryJson;
+List<dynamic> dictionaryJson;
 
 void main(List<String> args) async {
   var parser = ArgParser()..addOption('port', abbr: 'p');
@@ -33,16 +33,20 @@ void main(List<String> args) async {
     return;
   }
 
-  app.get('/hello', (shelf.Request request) {
-    return shelf.Response.ok('hello-world');
-  });
-
-  app.get('/', (shelf.Request request) {
-    return shelf.Response.ok('hello-world');
+  app.get('/word/<word>', (shelf.Request request, String word) {
+    var response = encodeDecodeWord(word);  
+    return shelf.Response.ok('Translated word is $response');
   });
 
   var server = await io.serve(app.handler, _hostname, port);
   print('Serving at http://${server.address.host}:${server.port}');
+}
+
+String encodeDecodeWord(String word) {
+  // Needed because shelf has problems with óéí characters
+  var decodeWord = Uri.decodeQueryComponent(word);
+  var translation = findWordInDictionary(decodeWord);
+  return Uri.encodeQueryComponent(translation);
 }
 
 Future readJsonFile() async {
@@ -55,9 +59,22 @@ Future readJsonFile() async {
     await for (var line in lines) {
       jsonText = jsonText + line;
     }
-    dictionaryJson = jsonDecode(jsonText);
+      dictionaryJson = jsonDecode(jsonText);
     return dictionaryJson;
   } catch (_) {
     print('err1or: $_');
   }
+}
+
+String findWordInDictionary(String word) {
+  String translation;
+
+  for (var i = 0; i < dictionaryJson.length; i++) {
+    if (dictionaryJson[i]['mkd'] == word) {
+      translation = dictionaryJson[i]['esp'];
+      break;
+    }
+  }
+
+  return translation;
 }
