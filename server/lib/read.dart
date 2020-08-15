@@ -14,10 +14,6 @@ class Read {
   var jsonPath = File('../assets/dictionary.json');
   List<dynamic> dictionaryJson;
 
-  List<dynamic> get dict {
-    return dictionaryJson;
-  }
-    
   Future readJsonFile() async {
     var jsonText = '';
 
