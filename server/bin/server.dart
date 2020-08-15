@@ -10,17 +10,21 @@ import 'package:shelf_router/shelf_router.dart';
 const _hostname = 'localhost';
 
 var jsonPath = File('../assets/dictionary.json');
-var dictionaryJson = '';
+var dictionaryJson;
 
 void main(List<String> args) async {
   var parser = ArgParser()..addOption('port', abbr: 'p');
   var result = parser.parse(args);
   var app = Router();
-  var aaa = 22;
 
   // For Google Cloud Run, we respect the PORT environment variable
   var portStr = result['port'] ?? Platform.environment['PORT'] ?? '4500';
   var port = int.tryParse(portStr);
+
+  await readJsonFile().then(
+    (aaa) => print('ddd $aaa')
+  );
+
 
   if (port == null) {
     stdout.writeln('Could not parse port value "$portStr" into a number.');
@@ -34,7 +38,7 @@ void main(List<String> args) async {
   });
 
   app.get('/', (shelf.Request request) {
-    return shelf.Response.ok('hello-world $aaa');
+    return shelf.Response.ok('hello-world');
   });
 
   var server = await io.serve(app.handler, _hostname, port);
@@ -52,7 +56,8 @@ Future readJsonFile() async {
       jsonText = jsonText + line;
     }
     dictionaryJson = jsonDecode(jsonText);
+    return dictionaryJson;
   } catch (_) {
-    print('error: $_');
+    print('err1or: $_');
   }
 }
