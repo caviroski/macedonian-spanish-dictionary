@@ -43,6 +43,7 @@ void loadEnd(HttpRequest httpRequest) {
   if (httpRequest.response == 'noword') {
     input.value = 'No translation for this word';
   } else {
-    input.value = httpRequest.response;
+    var decodeWord = Uri.decodeQueryComponent(httpRequest.response);
+    input.value = decodeWord;
   }
 }
