@@ -38,5 +38,11 @@ void getTranslatedWord(String word) {
 }
 
 void loadEnd(HttpRequest httpRequest) {
-  print('DONE');
+  var input = querySelector('.translation-display') as InputElement;
+  print('DONE ${httpRequest.response}');
+  if (httpRequest.response == 'noword') {
+    input.value = 'No translation for this word';
+  } else {
+    input.value = httpRequest.response;
+  }
 }
