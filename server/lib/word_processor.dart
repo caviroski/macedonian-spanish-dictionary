@@ -16,6 +16,9 @@ class WordProcessor {
     // Needed because shelf has problems with óéí characters
     var decodeWord = Uri.decodeQueryComponent(word);
     var translation = findWordInDictionary(decodeWord);
+    if (translation == null) {
+      return 'noword';
+    }
     return Uri.encodeQueryComponent(translation);
   }
 

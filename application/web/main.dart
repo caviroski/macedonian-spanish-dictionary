@@ -32,7 +32,7 @@ bool isCyrillicWord(String word) {
 
 void getTranslatedWord(String word) {
   var httpRequest = HttpRequest();
-  httpRequest.open('GET', 'http://localhost:4500/word/Здраво');
+  httpRequest.open('GET', 'http://localhost:4500/word/$word');
   httpRequest.onLoadEnd.listen((e) => loadEnd(httpRequest));
   httpRequest.send();
 }
