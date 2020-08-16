@@ -8,7 +8,22 @@ html, body {
   font-family: 'Roboto', sans-serif;
 }
 
-#output {
-  padding: 20px;
-  text-align: center;
+.title {
+  padding: 35px 0 0 35px;
+}
+
+.translation-title {
+  padding-left: 150px;
+}
+
+.word-input {
+  margin: 20px 0 0 35px;
+}
+
+.translation-display {
+  margin-left: 105px;
+}
+
+.translate-button {
+  margin: 20px 0 0 35px;
 }
