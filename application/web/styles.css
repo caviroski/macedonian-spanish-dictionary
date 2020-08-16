@@ -22,6 +22,7 @@ html, body {
 
 .translation-display {
   margin-left: 105px;
+  width: 250px;
 }
 
 .translate-button {
