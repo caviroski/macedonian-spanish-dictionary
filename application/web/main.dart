@@ -10,14 +10,15 @@ void onTranslateClick(MouseEvent event) {
 }
 
 void checkInput(String word) {
+  var input = querySelector('.translation-display') as InputElement;
   if (word == '') {
-    (querySelector('.translation-display') as InputElement).value = 'Please enter word';
+    input.value = 'Please enter word';
   } else if (isCyrillicWord(word)) {
     print('translate');
   } else if (!isWord(word)) {
-    (querySelector('.translation-display') as InputElement).value = 'Only words accepted';
+    input.value = 'Only words accepted';
   } else if (isWord(word)) {
-    (querySelector('.translation-display') as InputElement).value = 'Only Macedonian Cyrillic words accepted';
+    input.value = 'Only Macedonian Cyrillic words accepted';
   }
 }
 
