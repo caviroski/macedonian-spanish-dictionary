@@ -14,7 +14,7 @@ void checkInput(String word) {
   if (word == '') {
     input.value = 'Please enter word';
   } else if (isCyrillicWord(word)) {
-    print('translate');
+    getTranslatedWord(word);
   } else if (!isWord(word)) {
     input.value = 'Only words accepted';
   } else if (isWord(word)) {
@@ -28,4 +28,15 @@ bool isWord(String word) {
 
 bool isCyrillicWord(String word) {
   return RegExp(r'^[аАбБвВгГдДѓЃеЕжЖзЗѕЅиИјЈкКлЛљЉмМнНњЊоОпПрРсСтТќЌуУфФхХцЦчЧџЏшШ]+$').hasMatch(word);
+}
+
+void getTranslatedWord(String word) {
+  var httpRequest = HttpRequest();
+  httpRequest.open('GET', 'http://localhost:4500/word/Здраво');
+  httpRequest.onLoadEnd.listen((e) => loadEnd(httpRequest));
+  httpRequest.send();
+}
+
+void loadEnd(HttpRequest httpRequest) {
+  print('DONE');
 }

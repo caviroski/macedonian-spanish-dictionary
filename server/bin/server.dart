@@ -17,6 +17,7 @@ void main(List<String> args) async {
   var app = Router();
   var read = Read();
   var wordProcessor = WordProcessor();
+  final _headers = {'Access-Control-Allow-Origin': '*', 'Content-Type': 'text/html'};
 
   // For Google Cloud Run, we respect the PORT environment variable
   var portStr = result['port'] ?? Platform.environment['PORT'] ?? '4500';
@@ -33,11 +34,21 @@ void main(List<String> args) async {
     return;
   }
 
+  shelf.Response _options(shelf.Request request) => (request.method == 'OPTIONS')?
+    shelf.Response.ok(null, headers: _headers) : null;
+  shelf.Response _cors(shelf.Response response) => response.change(headers: _headers);
+  var _fixCORS = shelf.createMiddleware(requestHandler: _options, responseHandler: _cors);
+
   app.get('/word/<word>', (shelf.Request request, String word) {
-    var response = wordProcessor.encodeDecodeWord(word);  
-    return shelf.Response.ok('Translated word is $response');
+    var response = wordProcessor.encodeDecodeWord(word);
+    return shelf.Response.ok('$response');
   });
 
-  var server = await io.serve(app.handler, _hostname, port);
+  final handler = const shelf.Pipeline()
+  .addMiddleware(_fixCORS)
+  .addMiddleware(shelf.logRequests())
+  .addHandler(app.handler);
+
+  var server = await io.serve(handler, _hostname, port);
   print('Serving at http://${server.address.host}:${server.port}');
 }
