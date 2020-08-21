@@ -24,7 +24,7 @@ void main(List<String> args) async {
   var port = int.tryParse(portStr);
 
   await read.readJsonFile().then(
-    (aaa) => print('ddd $aaa')
+    (db) => print('Data base loaded')
   );
 
   if (port == null) {
