@@ -8,7 +8,6 @@ import 'package:shelf_router/shelf_router.dart';
 import 'package:server/read.dart';
 import 'package:server/word_processor.dart';
 
-// For Google Cloud Run, set _hostname to '0.0.0.0'.
 const _hostname = 'localhost';
 
 void main(List<String> args) async {
@@ -39,15 +38,15 @@ void main(List<String> args) async {
   shelf.Response _cors(shelf.Response response) => response.change(headers: _headers);
   var _fixCORS = shelf.createMiddleware(requestHandler: _options, responseHandler: _cors);
 
+  final handler = const shelf.Pipeline()
+    .addMiddleware(_fixCORS)
+    .addMiddleware(shelf.logRequests())
+    .addHandler(app.handler);
+
   app.get('/word/<word>', (shelf.Request request, String word) {
     var response = wordProcessor.encodeDecodeWord(word);
     return shelf.Response.ok('$response');
   });
-
-  final handler = const shelf.Pipeline()
-  .addMiddleware(_fixCORS)
-  .addMiddleware(shelf.logRequests())
-  .addHandler(app.handler);
 
   var server = await io.serve(handler, _hostname, port);
   print('Serving at http://${server.address.host}:${server.port}');

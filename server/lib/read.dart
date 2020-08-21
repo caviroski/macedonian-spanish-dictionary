@@ -4,15 +4,14 @@ import 'dart:io';
 class Read {
 
   static final Read _singleton = Read._internal();
-
+  var jsonPath = File('../assets/dictionary.json');
+  List<dynamic> dictionaryJson;
+  
   factory Read() {
     return _singleton;
   }
 
   Read._internal();
-
-  var jsonPath = File('../assets/dictionary.json');
-  List<dynamic> dictionaryJson;
 
   Future readJsonFile() async {
     var jsonText = '';

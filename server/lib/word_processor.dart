@@ -3,14 +3,13 @@ import 'package:server/read.dart';
 class WordProcessor {
 
   static final WordProcessor _singleton = WordProcessor._internal();
+  var read = Read();
 
   factory WordProcessor() {
     return _singleton;
   }
 
   WordProcessor._internal();
-
-  var read = Read();
 
   String encodeDecodeWord(String word) {
     // Needed because shelf has problems with óéí characters
